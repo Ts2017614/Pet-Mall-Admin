@@ -5,7 +5,39 @@
       "title": "张三",
       "sort": "1",
       "identification": "list",
-      "createdate": "2019-11-1"
+      "createdate": "2019-11-1",
+      "children": [
+        {
+          "id": 31,
+          "sort": "2",
+          "title": "张三2",
+          "identification": "list",
+          "createdate": "2019-11-1",
+          "children": [
+            {
+              "id": 41,
+              "sort": "20",
+              "title": "张三5",
+              "identification": "list",
+              "createdate": "2019-11-1"
+            },
+            {
+              "id": 42,
+              "sort": "31",
+              "title": "张三5",
+              "identification": "list",
+              "createdate": "2019-11-1"
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "sort": "3",
+          "title": "张三3",
+          "identification": "list",
+          "createdate": "2019-11-1"
+        }
+      ]
     },
     {
       "id": 2,

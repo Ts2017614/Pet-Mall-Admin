@@ -6,11 +6,15 @@ export default {
   /**
   * @description 接口变量，admin和pets-store
   */
- isAmdin:'admin',
+  isAmdin: 'admin',
   /**
   * @description 接口变量，admin和pets-store
   */
- isPetsStore:'pets-store',
+  isPetsStore: 'pets-store',
+  /**
+  * @description 接口变量，
+  */
+  isPetsMenu: 'menu',
   /**
    * @description token key
    */

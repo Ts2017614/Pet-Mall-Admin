@@ -15,17 +15,15 @@
       </div>
       <el-table :data="tableData.list"
                 border
+                row-key="id"
+                :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header">
-        <el-table-column prop="id"
-                         label="ID"
-                         width="55"
-                         align="center">
-        </el-table-column>
         <el-table-column prop="title"
                          label="菜单标题"
-                         align="center"></el-table-column>
+                         align="center">
+        </el-table-column>
         <el-table-column prop="sort"
                          label="排序"
                          align="center">
@@ -66,6 +64,30 @@
 <script setup lang="ts">
 import { reactive, ref, defineComponent } from "vue";
 import tableData from "public/mockdata.json";
+import { menuList } from "@/api/menuList";
+import Config from "@/settings";
+// menuList(Config.isPetsMenu, { current: 1, size: 10 }).then((res) => {
+//   console.log(res);
+// });
+const data = [
+  {
+    label: "Level one 1",
+    children: [
+      {
+        label: "Level two 1-1",
+        children: [
+          {
+            label: "Level three 1-1-1"
+          }
+        ]
+      }
+    ]
+  },
+];
+const defaultProps = ref({
+  children: "children",
+  label: "label"
+});
 </script>
 <script lang="ts">
 export default {

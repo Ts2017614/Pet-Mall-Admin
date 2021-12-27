@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 import Config from '@/settings'
 
 // 类型
-import { LoginUserInfo } from "../type"
+import { LoginUserInfo } from "../type/login"
 // 接口
 import { login } from "@/api/login"
 export const useStore = defineStore({

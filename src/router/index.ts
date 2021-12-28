@@ -6,8 +6,7 @@ import { getToken } from '@/utils/auth'
 const MenuList = () => import("@/views/menuList/index.vue")
 const RoleManagement = () => import("@/views/roleManagement/index.vue")
 const UserList = () => import("@/views/userList/index.vue")
-
-import Home from "../views/Home.vue";
+const Home = () => import("@/views/Home.vue")
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
@@ -145,6 +144,16 @@ const routes: RouteRecordRaw[] = [
         component: () =>
           import(/* webpackChunkName: "editor" */ "../views/Editor.vue")
       },
+      {
+        path: "/:pathMatch(.*)",
+        name: "404",
+        meta: {
+          title: "找不到页面"
+        },
+        component: () =>
+          import(/* webpackChunkName: "404" */ "../views/404.vue")
+      },
+
       // 权限
       {
         path: "/MenuList",

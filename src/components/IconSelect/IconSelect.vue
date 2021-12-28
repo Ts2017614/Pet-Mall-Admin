@@ -19,7 +19,7 @@
 
 <script setup  lang="ts">
 import { ref, computed, defineEmits } from "vue";
-const emit = defineEmits(['selected'])
+const emit = defineEmits(["selected"]);
 const iconList = [
   "attentionforbid",
   "attentionforbidfill",
@@ -153,9 +153,14 @@ const list = computed(() => {
     return item.indexOf(keyword.value) !== -1;
   });
 });
-const selectedIcon=(item:string)=>{
-  emit("selected",item)
-}
+const selectedIcon = (item: string) => {
+  emit("selected", item);
+
+  document.body.onclick=function(){
+    console.log(123);
+
+  }
+};
 </script>
 <style lang="scss" scoped>
 .icon-body {

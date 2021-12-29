@@ -15,7 +15,7 @@
       </div>
       <!-- 表格 -->
       <el-table
-        :data="tableData.list"
+        :data="tableData"
         border
         row-key="id"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -23,10 +23,18 @@
         ref="multipleTable"
         header-cell-class-name="table-header"
       >
-        <el-table-column prop="title" label="菜单标题" align="center"></el-table-column>
-        <el-table-column prop="sort" label="排序" align="center"></el-table-column>
-        <el-table-column prop="identification" label="权限标识" align="center"></el-table-column>
-        <el-table-column prop="createdate" label="创建日期" align="center"></el-table-column>
+        <el-table-column prop="name" label="菜单标题" align="center"></el-table-column>
+        <el-table-column prop="icon" label="icon" align="center">
+          <template #default="scope">
+            <i :class="`el-icon-lx-${scope.row.icon}`"></i>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createdAt" label="创建日期" align="center">
+          <template #default="scope">{{ $filter.formatTime(scope.row.createdAt) }}</template>
+        </el-table-column>
+        <el-table-column prop="updatedAt" label="更新日期" align="center">
+          <template #default="scope">{{ $filter.formatTime(scope.row.updatedAt) }}</template>
+        </el-table-column>
         <el-table-column label="操作" width="180" align="center">
           <template #default="scope">
             <el-button type="text" icon="el-icon-edit" @click="addEdit(scope.$index, scope.row)">编辑</el-button>
@@ -99,17 +107,20 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, defineComponent } from "vue";
+import { ref, onMounted, getCurrentInstance } from "vue";
 import { ElMessageBox, ElForm } from "element-plus";
 import { menuList } from "@/api/menuList";
 import { addRules } from "./verify";
 import IconSelect from "@/components/IconSelect/IconSelect.vue";
 import Config from "@/settings";
-import tableData from "public/mockdata.json";
-// menuList(Config.isPetsMenu, { current: 1, size: 10 }).then((res) => {
-//   console.log(res);
-// });
+//NOTE:生命周期
+onMounted(() => {
+  menuList(Config.isPetsMenu, { current: 1, size: 10 }).then((res) => {
+    tableData.value = res.data.data;
+  });
+})
 // NOTE:声明变量
+const tableData = ref([])
 const dialogVisible = ref(false); //弹窗
 const menuForm = ref<InstanceType<typeof ElForm>>()
 const form = ref({
@@ -154,13 +165,7 @@ const data = ref([
 ]);
 // NOTE:声明方法
 const handleClose = (done: () => void) => {
-  ElMessageBox.confirm("Are you sure to close this dialog?")
-    .then(() => {
-      done();
-    })
-    .catch(() => {
-      // catch error
-    });
+  done();
 };
 // 搜索
 const handleSearch = () => {

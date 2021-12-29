@@ -18,7 +18,7 @@
 </template>
 
 <script setup  lang="ts">
-import { ref, computed, defineEmits } from "vue";
+import { ref, computed } from "vue";
 const emit = defineEmits(["selected"]);
 const iconList = [
   "attentionforbid",

@@ -1,12 +1,13 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import type { RouteRecordRaw } from "vue-router" //type表示是类型，不是函数或者其他东西，也可以不写
-import Cookies from 'js-cookie'
-import { getToken } from '@/utils/auth'
+import type { RouteRecordRaw } from "vue-router"; //type表示是类型，不是函数或者其他东西，也可以不写
+import Cookies from "js-cookie";
+import { getToken } from "@/utils/auth";
+import { ElMessage } from "element-plus";
 
-const MenuList = () => import("@/views/menuList/index.vue")
-const RoleManagement = () => import("@/views/roleManagement/index.vue")
-const UserList = () => import("@/views/userList/index.vue")
-const Home = () => import("@/views/Home.vue")
+const MenuList = () => import("@/views/menuList/index.vue");
+const RoleManagement = () => import("@/views/roleManagement/index.vue");
+const UserList = () => import("@/views/userList/index.vue");
+const Home = () => import("@/views/Home.vue");
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
@@ -199,8 +200,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | vue-manage-system`;
-  const role = Cookies.get('account');
-  const token=getToken()
+  const role = Cookies.get("account");
+  const token = getToken();
   // if (!role && to.path !== "/login") {
   //   next("/login");
   // } else if (to.meta.permission) {
@@ -213,10 +214,11 @@ router.beforeEach((to, from, next) => {
   if (to.path != "/login") {
     if (!token) {
       next("/login");
-    }else{
+      ElMessage.warning("登陆过期，请重新登陆");
+    } else {
       next();
     }
-  }else{
+  } else {
     next();
   }
 });

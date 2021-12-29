@@ -1,17 +1,17 @@
 // 修改 store.js
 import { defineStore } from "pinia";
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import Cookies from 'js-cookie'
-import Config from '@/settings'
+import { getToken, setToken, removeToken } from "@/utils/auth";
+import Cookies from "js-cookie";
+import Config from "@/settings";
 
 // 类型
-import { LoginUserInfo } from "../type/login"
+import { LoginUserInfo } from "../type/login";
 // 接口
-import { login } from "@/api/login"
+import { login } from "@/api/login";
 export const useStore = defineStore({
   id: "myGlobalState",
   state: () => ({
-    token: '',
+    token: "",
     user: {},
     tagsList: [],
     collapse: false
@@ -22,7 +22,7 @@ export const useStore = defineStore({
       this.tagsList.splice(data.index, 1);
     },
     setTagsItem(data: any) {
-      this.tagsList.push((data as never));
+      this.tagsList.push(data as never);
     },
     clearTags() {
       this.tagsList = [];
@@ -53,37 +53,39 @@ export const useStore = defineStore({
     // 登录
     Login(type: string, userInfo: LoginUserInfo) {
       return new Promise((resolve, reject) => {
-        login(type, userInfo).then(res => {
-          this.user = res.data;
-          this.token = res.data.token;
-          //NOTE:可以进行对称加密，我这里没做
-          setToken(res.data.token)
-          Cookies.set('user', JSON.stringify(this.user), { expires: Config.passCookieExpires })
-          resolve(res.data)
-        }).catch(error => {
-          reject(error)
-        })
-      })
+        login(type, userInfo)
+          .then((res) => {
+            this.user = res.data;
+            this.token = res.data.token;
+            //NOTE:可以进行对称加密，我这里没做
+            setToken(res.data.token);
+            Cookies.set("user", JSON.stringify(this.user), {
+              expires: Config.passCookieExpires
+            });
+            resolve(res.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
     },
     // 退出
     loout() {
-      Cookies.remove('user');
-      this.user={};
-      this.token='';
-      removeToken()
+      Cookies.remove("user");
+      this.user = {};
+      this.token = "";
+      removeToken();
     },
     // 刷新重新加载pinia
     RefreshVuex() {
-      const token = Cookies.get("token")
-      const userInfo = Cookies.get("user")
+      const token = Cookies.get("token");
+      const userInfo = Cookies.get("user");
       if (token) {
-        this.token=token
+        this.token = token;
       }
       if (userInfo) {
-        this.user=JSON.parse(userInfo)
+        this.user = JSON.parse(userInfo);
       }
-
     }
   }
 });
-

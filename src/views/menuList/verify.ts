@@ -1,5 +1,5 @@
-import { rulesType } from "@/type/menuList"
-export const addRules:rulesType = {
+import { rulesType } from "@/type/menuList";
+export const addRules: rulesType = {
   name: [
     {
       required: true,
@@ -27,5 +27,5 @@ export const addRules:rulesType = {
       message: "请选择上级目录",
       trigger: "change"
     }
-  ],
-}
+  ]
+};

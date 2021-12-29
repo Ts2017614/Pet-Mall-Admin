@@ -1,23 +1,34 @@
 <template>
   <div class="icon-body">
-    <el-input v-model="keyword"
-              style="position: relative;"
-              clearable
-              placeholder="请输入图标名称">
+    <el-input
+      v-model="keyword"
+      style="position: relative"
+      clearable
+      placeholder="请输入图标名称"
+    >
     </el-input>
     <div class="icon-list">
-      <div v-for="(item, index) in list"
-           :key="index"
-           @click="selectedIcon(item)">
-        <i :class="`el-icon-lx-${item}`"
-           style="height: 30px;width: 16px;line-height: 30px;vertical-align: super;"></i>
+      <div
+        v-for="(item, index) in list"
+        :key="index"
+        @click="selectedIcon(item)"
+      >
+        <i
+          :class="`el-icon-lx-${item}`"
+          style="
+            height: 30px;
+            width: 16px;
+            line-height: 30px;
+            vertical-align: super;
+          "
+        ></i>
         <span>{{ item }}</span>
       </div>
     </div>
   </div>
 </template>
 
-<script setup  lang="ts">
+<script setup lang="ts">
 import { ref, computed } from "vue";
 const emit = defineEmits(["selected"]);
 const iconList = [
@@ -156,10 +167,9 @@ const list = computed(() => {
 const selectedIcon = (item: string) => {
   emit("selected", item);
 
-  document.body.onclick=function(){
+  document.body.onclick = function () {
     console.log(123);
-
-  }
+  };
 };
 </script>
 <style lang="scss" scoped>
@@ -187,4 +197,3 @@ const selectedIcon = (item: string) => {
   }
 }
 </style>
-

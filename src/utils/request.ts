@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ElMessage } from "element-plus";
-import { getToken } from '@/utils/auth'
+import { getToken } from "@/utils/auth";
 
 const service = axios.create({
   // process.env.NODE_ENV === 'development' 来判断是否开发环境
@@ -13,9 +13,9 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     if (getToken()) {
-      config.headers['Authorization'] ='Bearer '+ getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+      config.headers["Authorization"] = "Bearer " + getToken(); // 让每个请求携带自定义token 请根据实际情况自行修改
     }
-    config.headers['Content-Type'] = 'application/json'
+    config.headers["Content-Type"] = "application/json";
     return config;
   },
   (error) => {
@@ -29,7 +29,7 @@ service.interceptors.response.use(
     if (response.data.statusCode === 200) {
       return response.data;
     } else {
-      ElMessage.warning(response.data.message)
+      ElMessage.warning(response.data.message);
       Promise.reject();
     }
   },

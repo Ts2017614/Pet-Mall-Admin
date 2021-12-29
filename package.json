@@ -6,7 +6,6 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "lint": "vite lint",
     "prettier": "prettier --write .",
     "prepare": "husky install",
     "commit": "cz"

@@ -213,14 +213,6 @@ const data = ref([
   }
 ]);
 
-
-
-
-
-
-
-
-
 const page = ref<pageItem>({
   size: 10,
   total: 1000,

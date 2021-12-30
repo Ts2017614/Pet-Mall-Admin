@@ -34,6 +34,7 @@ service.interceptors.response.use(
     }
   },
   (error) => {
+    ElMessage.warning(error.message||'请求失败');
     return Promise.reject();
   }
 );

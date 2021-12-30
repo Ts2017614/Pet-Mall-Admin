@@ -1,18 +1,8 @@
 <template>
   <div class="icon-body">
-    <el-input
-      v-model="keyword"
-      style="position: relative"
-      clearable
-      placeholder="请输入图标名称"
-    >
-    </el-input>
+    <el-input v-model="keyword" style="position: relative" clearable placeholder="请输入图标名称"></el-input>
     <div class="icon-list">
-      <div
-        v-for="(item, index) in list"
-        :key="index"
-        @click="selectedIcon(item)"
-      >
+      <div v-for="(item, index) in list" :key="index" @click="selectedIcon(item)">
         <i
           :class="`el-icon-lx-${item}`"
           style="
@@ -166,10 +156,7 @@ const list = computed(() => {
 });
 const selectedIcon = (item: string) => {
   emit("selected", item);
-
-  document.body.onclick = function () {
-    console.log(123);
-  };
+  document.body.click()
 };
 </script>
 <style lang="scss" scoped>

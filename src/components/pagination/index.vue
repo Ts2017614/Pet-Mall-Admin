@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class>
     <el-pagination
       :page-sizes="page?.sizes"
       :page-size.sync="page?.size"
@@ -15,6 +15,7 @@
 <script setup lang="ts">
 import { ref, defineProps, PropType } from "vue";
 import { pageItem } from "./type";
+const emit = defineEmits(["changeSize", "changeCurrent"])
 const props = defineProps({
   page: {
     type: Object as PropType<pageItem>,
@@ -23,9 +24,11 @@ const props = defineProps({
 });
 const handleSizeChange = (val: number) => {
   console.log("size", typeof val);
+  emit("changeSize", val);
 };
 const handleCurrentChange = (val: number) => {
   console.log("current", typeof val);
+  emit("changeCurrent", val);
 };
 </script>
 <style lang="scss" scoped></style>

@@ -21,11 +21,4 @@ export const addRules: rulesType = {
       trigger: "blur"
     }
   ],
-  parentIdName: [
-    {
-      required: true,
-      message: "请选择上级目录",
-      trigger: "change"
-    }
-  ]
 };

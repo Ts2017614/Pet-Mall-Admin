@@ -139,8 +139,10 @@ export default {
     // 获取表格数据
     const getData = () => {
       fetchData(query).then((res) => {
+        console.log(res);
         tableData.value = res.list;
         pageTotal.value = res.pageTotal || 50;
+
       });
     };
     getData();

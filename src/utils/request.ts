@@ -26,6 +26,7 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (response) => {
+    // return response.data;
     if (response.data.statusCode === 200) {
       return response.data;
     } else {

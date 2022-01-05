@@ -1,9 +1,3 @@
-// 分页列表
-export interface menuListType {
-  current: number | string;
-  size: number | string;
-  name?:string
-}
 // 规则类型
 type rulestrigger = "blur" | "change";
 export interface rulesConfig {

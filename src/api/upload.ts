@@ -1,5 +1,5 @@
 import request from "../utils/request";
-// 分页列表
+// 下载
 export const upload = (data: any) => {
   return request({
     url: `/api/common/upload`,

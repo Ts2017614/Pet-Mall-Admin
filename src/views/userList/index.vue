@@ -46,12 +46,12 @@
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="roleId"
+          prop="roleId.remark"
           label="用户"
           align="center"
         ></el-table-column>
         <el-table-column
-          prop="petsId"
+          prop="petsId.name"
           label="宠物店"
           align="center"
         ></el-table-column>
@@ -63,11 +63,6 @@
               fit="cover"
               :preview-src-list="[scope.row.avatar]"
             ></el-image>
-          </template>
-        </el-table-column>
-        <el-table-column prop="status" label="状态" align="center">
-          <template #default="scope">
-            <el-switch v-model="scope.row.status" />
           </template>
         </el-table-column>
         <el-table-column prop="createdAt" label="创建日期" align="center">
@@ -136,6 +131,40 @@
         <el-form-item prop="phone" label="手机号">
           <el-input v-model="form.phone"></el-input>
         </el-form-item>
+        <el-form-item prop="roleId" label="角色">
+          <el-select
+            clearable
+            v-model="form.roleId"
+            class="m-2"
+            placeholder="选择角色"
+            size="large"
+          >
+            <el-option
+              v-for="item in roleListOption"
+              :key="item._id"
+              :label="item.remark"
+              :value="item._id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="petsId" label="宠物店">
+          <el-select
+            clearable
+            v-model="form.petsId"
+            class="m-2"
+            placeholder="选择宠物店"
+            size="large"
+          >
+            <el-option
+              v-for="item in petStoreOption"
+              :key="item._id"
+              :label="item.name"
+              :value="item._id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item prop="status" label="状态">
           <el-switch
             v-model="form.status"
@@ -144,19 +173,7 @@
           ></el-switch>
         </el-form-item>
         <el-form-item prop="avatar" label="上传图像">
-          <el-upload
-            class="avatar-uploader"
-            :http-request="uploadImage"
-            :show-file-list="false"
-            :before-upload="beforeAvatarUpload"
-          >
-            <img
-              v-if="form.avatar"
-              src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%3A%2F%2Fdingyue.ws.126.net%2F2021%2F1017%2Ff2c759e6j00r13ups0057c000zk00hwm.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1643899751&t=2063296fba233849855204962a8a5265"
-              class="avatar"
-            />
-            <el-icon v-else class="el-icon-lx-add"></el-icon>
-          </el-upload>
+            <UplaodImage :avatar="form.avatar" @UploadcallBackUpload="UploadcallBackUpload"></UplaodImage>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -180,21 +197,24 @@ import { tableItem, formType } from "@/type/userList";
 
 // 接口
 // import { menuList, add, detail, edit, del, treeList } from "@/api/menuList";
-import { userList } from "@/api/userList";
-import { upload } from "@/api/upload";
-
+import { currentPage, add, edit, detail } from "@/api";
+import { roleList, petsStoreList } from "@/api/index";
 // 组件
 import Pagination from "@/components/pagination/index.vue";
+import UplaodImage from "@/views/uploadImage/index.vue"
 
 //NOTE:生命周期
 onMounted(() => {
   getDataList();
+  getRoleList();
+  getPetsStoreList();
 });
 // NOTE:声明变量
 const tableData = ref<tableItem[]>([]); //表格
 const dialogVisible = ref<boolean>(false); //弹窗
 const menuForm = ref<InstanceType<typeof ElForm>>(); //表单ref
 const form = ref<formType>({
+  _id: null,
   account: "",
   password: "",
   username: "",
@@ -204,37 +224,24 @@ const form = ref<formType>({
   petsId: null,
   status: true
 });
-
+// 角色列表
+const roleListOption = ref();
+// 宠物店
+const petStoreOption = ref();
 const page = ref<pageItem>({
   size: 10,
   total: null,
   current: 1
 });
 // NOTE:声明方法
-// 上传图片
-const uploadImage = (param:any) => {
-  const formData = new FormData();
-  formData.append("file", param.file);
-  formData.append("name", param.file.name);
-  upload(formData).then((res) => {
-    form.value.avatar = res.data;
-  });
-};
-const beforeAvatarUpload = (file: any) => {
-  const isJPG = file.type === "image/jpeg";
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isJPG) {
-    ElMessage.error("Avatar picture must be JPG format!");
-  }
-  if (!isLt2M) {
-    ElMessage.error("Avatar picture size can not exceed 2MB!");
-  }
-  return isJPG && isLt2M;
-};
+const UploadcallBackUpload=(avatar:string)=>{
+  console.log(avatar,'avatar');
+  form.value.avatar=avatar
+}
 // 列表数据,分页
 const getDataList = () => {
   let { current, size } = page.value;
-  userList(Config.isAmdin, { current, size }).then((res) => {
+  currentPage(Config.isAmdin, { current, size }).then((res) => {
     res.data.data[0].avatar =
       "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%3A%2F%2Fdingyue.ws.126.net%2F2021%2F1017%2Ff2c759e6j00r13ups0057c000zk00hwm.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1643899751&t=2063296fba233849855204962a8a5265";
     tableData.value = res.data.data;
@@ -249,48 +256,40 @@ const handleClose = (done: () => void) => {
 const addEdit = (index?: number | string, row?: any) => {
   if (!row) {
     menuForm.value?.resetFields();
+    form.value._id = null;
   } else {
-    // detail(Config.isAmdin, row._id).then((res) => {
-    //   for (const key in form.value) {
-    //     for (const keys in res.data) {
-    //       if (key == keys) {
-    //         (form.value as any)[key] = res.data[key];
-    //       }
-    //     }
-    //   }
-    //   console.log(form.value);
-    // });
+    detail(Config.isAmdin, row._id).then((res) => {
+      for (const key in form.value) {
+        for (const keys in res.data) {
+          if (key == keys) {
+            (form.value as any)[key] = res.data[key];
+          }
+        }
+      }
+    });
   }
   dialogVisible.value = true;
 };
 // 新增,编辑确认
-// const addConfig = () => {
-//   menuForm.value?.validate((valid) => {
-//     if (valid) {
-//       if (!form.value.parentId) form.value.parentId = "0";
-//       console.log(form.value._id);
-//       // return false;
-//       const addIsEdit = form.value._id ? edit : add;
-//       addIsEdit(Config.isAmdin, form.value).then((res) => {
-//         dialogVisible.value = false;
-//         ElMessage.success("成功-success");
-//         getDataList();
-//       });
-//     }
-//   });
-// };
+const addConfig = () => {
+  menuForm.value?.validate((valid) => {
+    if (valid) {
+      console.log(form.value.roleId);
+      const addIsEdit = form.value._id ? edit : add;
+      addIsEdit(Config.isAmdin, form.value).then((res) => {
+        dialogVisible.value = false;
+        ElMessage.success("成功-success");
+        getDataList();
+      });
+    }
+  });
+};
 // 删除
 // const handleDelete = (index: number | string, row: any) => {
 //   del(Config.isAmdin, row._id).then((res) => {
 //     ElMessage.warning("删除成功");
 //     getDataList();
 //   });
-// };
-//选择上级目录
-// const handleNodeClick = (item: any) => {
-//   console.log(item);
-//   form.value.parentIdName = item.name;
-//   form.value.parentId = item.parentId;
 // };
 // 分页器：改变条数
 const changeSize = (val: number) => {
@@ -301,6 +300,18 @@ const changeSize = (val: number) => {
 const changeCurrent = (val: number) => {
   page.value.current = val;
   getDataList();
+};
+// 角色列表
+const getRoleList = () => {
+  roleList().then((res) => {
+    roleListOption.value = res.data;
+  });
+};
+// 宠物店列表
+const getPetsStoreList = () => {
+  petsStoreList().then((res) => {
+    petStoreOption.value = res.data;
+  });
 };
 </script>
 <script lang="ts">
@@ -343,11 +354,14 @@ export default {
 .avatar {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 :deep(.el-upload) {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+:deep(.el-select) {
+  width: 100%;
 }
 </style>

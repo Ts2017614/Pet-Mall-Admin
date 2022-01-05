@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ElMessage } from "element-plus";
 import { getToken } from "@/utils/auth";
-
+axios.defaults.headers['Cache-Control'] = 'no-cache'
 const service = axios.create({
   // process.env.NODE_ENV === 'development' 来判断是否开发环境
   // easy-mock服务挂了，暂时不使用了
@@ -26,6 +26,8 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (response) => {
+    console.log(response,'response');
+
     // return response.data;
     if (response.data.statusCode === 200) {
       return response.data;
@@ -35,6 +37,8 @@ service.interceptors.response.use(
     }
   },
   (error) => {
+    console.log(12345,error);
+
     ElMessage.warning(error.message||'请求失败');
     return Promise.reject();
   }

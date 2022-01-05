@@ -59,6 +59,7 @@ export interface tableItem {
 }
 // 表单类型(和表单类型相似,也可以直接用表单类型)
 export interface formType {
+  _id:null|string
   account: string
   password: string
   username: string

@@ -173,7 +173,7 @@ import { addRules } from "./verify";
 import { tableItem, formType } from "@/type/menuList";
 
 // 接口
-import { menuList, add, detail, edit, del, treeList } from "@/api/menuList";
+import { currentPage, add, detail, edit, del, treeList } from "@/api";
 // 组件
 import IconSelect from "@/components/IconSelect/IconSelect.vue";
 import Pagination from "@/components/pagination/index.vue";
@@ -237,7 +237,7 @@ const page = ref<pageItem>({
 // 列表数据,分页
 const getDataList = () => {
   let { current, size } = page.value;
-  menuList(Config.isPetsMenu, { current, size }).then((res) => {
+  currentPage(Config.isPetsMenu, { current, size }).then((res) => {
     tableData.value = res.data.data;
     page.value.total = res.data.total;
   });

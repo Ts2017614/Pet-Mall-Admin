@@ -214,7 +214,7 @@ router.beforeEach((to, from, next) => {
   if (to.path != "/login") {
     if (!token) {
       next("/login");
-      // ElMessage.warning("登陆过期，请重新登陆");
+      ElMessage.warning("登陆过期，请重新登陆");
     } else {
       next();
     }

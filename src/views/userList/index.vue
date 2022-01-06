@@ -29,7 +29,13 @@
         </div>
       </div>
       <!-- 表格 -->
-      <el-table :data="tableData" border class="table" ref="multipleTable">
+      <el-table
+        v-loading="loading"
+        :data="tableData"
+        border
+        class="table"
+        ref="multipleTable"
+      >
         <el-table-column
           prop="account"
           label="账号"
@@ -57,11 +63,17 @@
         ></el-table-column>
         <el-table-column prop="avatar" label="头像" align="center">
           <template #default="scope">
-            <el-image
+            <el-image v-if="scope.row.avatar"
               class="table-td-thumb"
-              :src="scope.row.avatar||'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%3A%2F%2Fdingyue.ws.126.net%2F2021%2F1017%2Ff2c759e6j00r13ups0057c000zk00hwm.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1643899751&t=2063296fba233849855204962a8a5265'"
+              :src="scope.row.avatar"
               fit="cover"
               :preview-src-list="[scope.row.avatar]"
+            ></el-image>
+              <el-image v-else
+              class="table-td-thumb"
+              :src="defaultAvatar"
+              fit="cover"
+              :preview-src-list="[defaultAvatar]"
             ></el-image>
           </template>
         </el-table-column>
@@ -173,7 +185,10 @@
           ></el-switch>
         </el-form-item>
         <el-form-item prop="avatar" label="上传图像">
-            <UplaodImage :avatar="form.avatar" @UploadcallBackUpload="UploadcallBackUpload"></UplaodImage>
+          <UplaodImage
+            :avatar="form.avatar"
+            @UploadcallBackUpload="UploadcallBackUpload"
+          ></UplaodImage>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -201,7 +216,7 @@ import { currentPage, add, edit, detail, del } from "@/api";
 import { roleList, petsStoreList } from "@/api/index";
 // 组件
 import Pagination from "@/components/pagination/index.vue";
-import UplaodImage from "@/views/uploadImage/index.vue"
+import UplaodImage from "@/views/uploadImage/index.vue";
 
 //NOTE:生命周期
 onMounted(() => {
@@ -210,6 +225,8 @@ onMounted(() => {
   getPetsStoreList();
 });
 // NOTE:声明变量
+const defaultAvatar="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%3A%2F%2Fdingyue.ws.126.net%2F2021%2F1017%2Ff2c759e6j00r13ups0057c000zk00hwm.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1643899751&t=2063296fba233849855204962a8a5265"
+const loading = ref<Boolean>(true);
 const tableData = ref<tableItem[]>([]); //表格
 const dialogVisible = ref<boolean>(false); //弹窗
 const menuForm = ref<InstanceType<typeof ElForm>>(); //表单ref
@@ -234,18 +251,20 @@ const page = ref<pageItem>({
   current: 1
 });
 // NOTE:声明方法
-const UploadcallBackUpload=(avatar:string)=>{
-  console.log(avatar,'avatar');
-  form.value.avatar=avatar
-}
+const UploadcallBackUpload = (avatar: string) => {
+  console.log(avatar, "avatar");
+  form.value.avatar = avatar;
+};
 // 列表数据,分页
 const getDataList = () => {
+  loading.value = true;
   let { current, size } = page.value;
   currentPage(Config.isAmdin, { current, size }).then((res) => {
     // res.data.data[0].avatar =
     //   "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%3A%2F%2Fdingyue.ws.126.net%2F2021%2F1017%2Ff2c759e6j00r13ups0057c000zk00hwm.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1643899751&t=2063296fba233849855204962a8a5265";
     tableData.value = res.data.data;
     page.value.total = res.data.total;
+    loading.value = false;
   });
 };
 // 关闭弹窗

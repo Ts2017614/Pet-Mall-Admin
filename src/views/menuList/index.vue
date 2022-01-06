@@ -30,6 +30,7 @@
       </div>
       <!-- 表格 -->
       <el-table
+        v-loading="loading"
         :data="tableData"
         border
         row-key="id"
@@ -184,6 +185,7 @@ onMounted(() => {
   getTreeList();
 });
 // NOTE:声明变量
+const loading = ref<Boolean>(true);
 const tableData = ref<tableItem[]>([]); //表格
 const dialogVisible = ref<boolean>(false); //弹窗
 const menuForm = ref<InstanceType<typeof ElForm>>(); //表单ref
@@ -236,10 +238,12 @@ const page = ref<pageItem>({
 // NOTE:声明方法
 // 列表数据,分页
 const getDataList = () => {
+  loading.value = true;
   let { current, size } = page.value;
   currentPage(Config.isPetsMenu, { current, size }).then((res) => {
     tableData.value = res.data.data;
     page.value.total = res.data.total;
+    loading.value = false;
   });
 };
 // 上级tree数据

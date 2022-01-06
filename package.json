@@ -8,7 +8,8 @@
     "serve": "vite preview",
     "prettier": "prettier --write .",
     "prepare": "husky install",
-    "commit": "cz"
+    "commit": "cz",
+    "build:prod":"deploy-cli-service deploy --mode prod"
   },
   "dependencies": {
     "@types/js-cookie": "^3.0.1",

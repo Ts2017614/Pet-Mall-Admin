@@ -23,15 +23,14 @@ const props = defineProps({
   }
 });
 
-
-const emit=defineEmits(['UploadcallBackUpload'])
+const emit = defineEmits(["UploadcallBackUpload"]);
 const uploadImage = (param: any) => {
   const formData = new FormData();
   formData.append("file", param.file);
   formData.append("name", param.file.name);
   upload(formData).then((res) => {
-    const img=res.data
-    emit('UploadcallBackUpload',img)
+    const img = res.data;
+    emit("UploadcallBackUpload", img);
   });
 };
 const beforeAvatarUpload = (file: any) => {
@@ -46,4 +45,10 @@ const beforeAvatarUpload = (file: any) => {
   return isJPG && isLt2M;
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>

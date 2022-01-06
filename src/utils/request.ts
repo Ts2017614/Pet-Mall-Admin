@@ -37,9 +37,7 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-    console.log(12345,error);
-
-    ElMessage.warning(error.message||'请求失败');
+    ElMessage.warning(error.response.data.message||error.message||'请求失败');
     return Promise.reject();
   }
 );

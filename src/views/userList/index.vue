@@ -59,7 +59,7 @@
           <template #default="scope">
             <el-image
               class="table-td-thumb"
-              :src="scope.row.avatar"
+              :src="scope.row.avatar||'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%3A%2F%2Fdingyue.ws.126.net%2F2021%2F1017%2Ff2c759e6j00r13ups0057c000zk00hwm.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1643899751&t=2063296fba233849855204962a8a5265'"
               fit="cover"
               :preview-src-list="[scope.row.avatar]"
             ></el-image>
@@ -148,7 +148,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="petsId" label="宠物店">
+        <!-- <el-form-item prop="petsId" label="宠物店">
           <el-select
             clearable
             v-model="form.petsId"
@@ -164,7 +164,7 @@
             >
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item prop="status" label="状态">
           <el-switch
             v-model="form.status"
@@ -197,7 +197,7 @@ import { tableItem, formType } from "@/type/userList";
 
 // 接口
 // import { menuList, add, detail, edit, del, treeList } from "@/api/menuList";
-import { currentPage, add, edit, detail } from "@/api";
+import { currentPage, add, edit, detail, del } from "@/api";
 import { roleList, petsStoreList } from "@/api/index";
 // 组件
 import Pagination from "@/components/pagination/index.vue";
@@ -242,8 +242,8 @@ const UploadcallBackUpload=(avatar:string)=>{
 const getDataList = () => {
   let { current, size } = page.value;
   currentPage(Config.isAmdin, { current, size }).then((res) => {
-    res.data.data[0].avatar =
-      "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%3A%2F%2Fdingyue.ws.126.net%2F2021%2F1017%2Ff2c759e6j00r13ups0057c000zk00hwm.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1643899751&t=2063296fba233849855204962a8a5265";
+    // res.data.data[0].avatar =
+    //   "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fnimg.ws.126.net%2F%3Furl%3Dhttp%3A%2F%2Fdingyue.ws.126.net%2F2021%2F1017%2Ff2c759e6j00r13ups0057c000zk00hwm.jpg%26thumbnail%3D650x2147483647%26quality%3D80%26type%3Djpg&refer=http%3A%2F%2Fnimg.ws.126.net&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1643899751&t=2063296fba233849855204962a8a5265";
     tableData.value = res.data.data;
     page.value.total = res.data.total;
   });
@@ -285,12 +285,12 @@ const addConfig = () => {
   });
 };
 // 删除
-// const handleDelete = (index: number | string, row: any) => {
-//   del(Config.isAmdin, row._id).then((res) => {
-//     ElMessage.warning("删除成功");
-//     getDataList();
-//   });
-// };
+const handleDelete = (index: number | string, row: any) => {
+  del(Config.isAmdin, row._id).then((res) => {
+    ElMessage.warning("删除成功");
+    getDataList();
+  });
+};
 // 分页器：改变条数
 const changeSize = (val: number) => {
   page.value.size = val;
@@ -351,11 +351,7 @@ export default {
 .add-button {
   margin-right: 10px;
 }
-.avatar {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+
 :deep(.el-upload) {
   display: flex;
   align-items: center;
